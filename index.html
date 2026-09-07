@@ -320,10 +320,9 @@
           Progress Hari Ini
         </div>
 
-        <div class="progress-number">
-          35%
-        </div>
-      </div>
+        <div class="progress-number" id="progressNumber">
+0 / 50
+</div>
 
       <div class="progress-bar">
         <div class="progress-fill"></div>
@@ -388,4 +387,30 @@
   </div>
 
 </body>
+  <script>
+
+function updateBerandaProgress() {
+
+  const data =
+    JSON.parse(
+      localStorage.getItem("kitsumiKosakata")
+    ) || [];
+
+  const jumlah = data.length;
+
+  const persen =
+    Math.round((jumlah / 50) * 100);
+
+  document.getElementById("progressNumber")
+    .textContent =
+    jumlah + " / 50";
+
+  document.querySelector(".progress-fill")
+    .style.width =
+    persen + "%";
+}
+
+updateBerandaProgress();
+
+</script>
 </html>
