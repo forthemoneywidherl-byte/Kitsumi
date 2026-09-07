@@ -575,21 +575,19 @@ function updateProgress() {
 }
 
 
-function tandaiDipajari(index) {
-
-  if (!sudahDipelajari.includes(index)) {
+function tandaiDipelajari(index) {
+  if (!sudahDipajari.includes(index)) {
 
     sudahDipajari.push(index);
 
     localStorage.setItem(
       "kitsumiKosakata",
-      JSON.stringify(sudahDipelajari)
+      JSON.stringify(sudahDipajari)
     );
 
   }
 
   updateProgress();
-
 }
 
 
