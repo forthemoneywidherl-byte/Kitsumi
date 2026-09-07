@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Kitsumi - Belajar Bahasa Jepang</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f7faff;
+      color: #263238;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* SPLASH */
+    #splash {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      background: #dff0ff;
+      z-index: 9999;
+      overflow: hidden;
+    }
+
+    #splash img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .loading {
+      position: absolute;
+      top: 67%;
+      left: 20%;
+      width: 60%;
+      height: 15px;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .progress {
+      width: 0;
+      height: 100%;
+      background: #ff7fa4;
+      border-radius: 20px;
+      animation: loading 2.5s linear forwards;
+    }
+
+    @keyframes loading {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
+    }
+
+    /* APP */
+    #app {
+      display: none;
+      min
