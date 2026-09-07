@@ -311,7 +311,7 @@
 
   <div class="title">
     <h1>📚 Kosakata</h1>
-    <p>Pelajari kosakata Jepang N5.</p>
+    <p>Pelajari 800 kosakata Jepang sehari-hari.</p>
   </div>
 
   <!-- PROGRESS -->
@@ -324,7 +324,7 @@
       <span
         class="progress-number"
         id="progressText">
-        0 / 50
+        0 / 800
       </span>
     </div>
 
@@ -381,7 +381,7 @@
       </div>
 
       <div class="counter" id="counter">
-        1 / 50
+        1 / 800
       </div>
 
     </div>
@@ -482,107 +482,7 @@
 
 <script>
 
-/* =========================
-   50 KOSAKATA N5
-========================= */
-
-const kosakata = [
-
-  { kanji:"水", romaji:"Mizu", arti:"Air", emoji:"💧" },
-  { kanji:"山", romaji:"Yama", arti:"Gunung", emoji:"⛰️" },
-  { kanji:"川", romaji:"Kawa", arti:"Sungai", emoji:"🌊" },
-  { kanji:"木", romaji:"Ki", arti:"Pohon", emoji:"🌳" },
-  { kanji:"花", romaji:"Hana", arti:"Bunga", emoji:"🌸" },
-  { kanji:"空", romaji:"Sora", arti:"Langit", emoji:"☁️" },
-  { kanji:"雨", romaji:"Ame", arti:"Hujan", emoji:"🌧️" },
-  { kanji:"風", romaji:"Kaze", arti:"Angin", emoji:"🌬️" },
-  { kanji:"口", romaji:"Kuchi", arti:"Mulut", emoji:"👄" },
-  { kanji:"目", romaji:"Me", arti:"Mata", emoji:"👁️" },
-
-  { kanji:"耳", romaji:"Mimi", arti:"Telinga", emoji:"👂" },
-  { kanji:"手", romaji:"Te", arti:"Tangan", emoji:"✋" },
-  { kanji:"足", romaji:"Ashi", arti:"Kaki", emoji:"🦶" },
-  { kanji:"頭", romaji:"Atama", arti:"Kepala", emoji:"🧑" },
-  { kanji:"人", romaji:"Hito", arti:"Orang", emoji:"🧑" },
-  { kanji:"女", romaji:"Onna", arti:"Perempuan", emoji:"👩" },
-  { kanji:"男", romaji:"Otoko", arti:"Laki-laki", emoji:"👨" },
-  { kanji:"子", romaji:"Ko", arti:"Anak", emoji:"👦" },
-  { kanji:"父", romaji:"Chichi", arti:"Ayah", emoji:"👨" },
-  { kanji:"母", romaji:"Haha", arti:"Ibu", emoji:"👩" },
-
-  { kanji:"家", romaji:"Ie", arti:"Rumah", emoji:"🏠" },
-  { kanji:"学校", romaji:"Gakkou", arti:"Sekolah", emoji:"🏫" },
-  { kanji:"駅", romaji:"Eki", arti:"Stasiun", emoji:"🚉" },
-  { kanji:"店", romaji:"Mise", arti:"Toko", emoji:"🏪" },
-  { kanji:"病院", romaji:"Byouin", arti:"Rumah sakit", emoji:"🏥" },
-  { kanji:"会社", romaji:"Kaisha", arti:"Perusahaan", emoji:"🏢" },
-  { kanji:"先生", romaji:"Sensei", arti:"Guru", emoji:"👨‍🏫" },
-  { kanji:"学生", romaji:"Gakusei", arti:"Murid", emoji:"🎒" },
-  { kanji:"友達", romaji:"Tomodachi", arti:"Teman", emoji:"👥" },
-  { kanji:"電話", romaji:"Denwa", arti:"Telepon", emoji:"📱" },
-
-  { kanji:"本", romaji:"Hon", arti:"Buku", emoji:"📖" },
-  { kanji:"新聞", romaji:"Shinbun", arti:"Koran", emoji:"📰" },
-  { kanji:"名前", romaji:"Namae", arti:"Nama", emoji:"🏷️" },
-  { kanji:"時間", romaji:"Jikan", arti:"Waktu", emoji:"⏰" },
-  { kanji:"今日", romaji:"Kyou", arti:"Hari ini", emoji:"📅" },
-  { kanji:"明日", romaji:"Ashita", arti:"Besok", emoji:"🌅" },
-  { kanji:"昨日", romaji:"Kinou", arti:"Kemarin", emoji:"🗓️" },
-  { kanji:"朝", romaji:"Asa", arti:"Pagi", emoji:"🌄" },
-  { kanji:"夜", romaji:"Yoru", arti:"Malam", emoji:"🌙" },
-  { kanji:"今", romaji:"Ima", arti:"Sekarang", emoji:"⌚" },
-
-  { kanji:"大きい", romaji:"Ookii", arti:"Besar", emoji:"🐘" },
-  { kanji:"小さい", romaji:"Chiisai", arti:"Kecil", emoji:"🐭" },
-  { kanji:"新しい", romaji:"Atarashii", arti:"Baru", emoji:"✨" },
-  { kanji:"古い", romaji:"Furui", arti:"Lama / tua", emoji:"🏚️" },
-  { kanji:"高い", romaji:"Takai", arti:"Tinggi / mahal", emoji:"📈" },
-  { kanji:"安い", romaji:"Yasui", arti:"Murah", emoji:"💰" },
-  { kanji:"長い", romaji:"Nagai", arti:"Panjang", emoji:"📏" },
-  { kanji:"白い", romaji:"Shiroi", arti:"Putih", emoji:"⚪" },
-  { kanji:"黒い", romaji:"Kuroi", arti:"Hitam", emoji:"⚫" },
-  { kanji:"赤い", romaji:"Akai", arti:"Merah", emoji:"🔴" }
-
-];
-
-
-/* =========================
-   PROGRESS
-========================= */
-
-let sudahDipajari =
-  JSON.parse(
-    localStorage.getItem("kitsumiKosakata")
-  ) || [];
-
-
-function updateProgress() {
-
-  const jumlah =
-  sudahDipajari.length;
-
-  const persen =
-    (jumlah / kosakata.length) * 100;
-
-  document.getElementById("progressText")
-    .textContent =
-    jumlah + " / " + kosakata.length;
-
-  document.getElementById("progressFill")
-    .style.width =
-    persen + "%";
-
-}
-
-
-function tandaiDipajari(index) {
-  if (!sudahDipajari.includes(index)) {
-
-    sudahDipajari.push(index);
-
-    localStorage.setItem(
-      "kitsumiKosakata",
-      JSON.stringify(sudahDipajari)
+/
     );
 
   }
@@ -796,6 +696,310 @@ function tampilkanSoal() {
 
       };
 
+/* =========================
+   DATA KOSAKATA
+========================= */
+
+let kosakata = [];
+
+async function muatKosakata() {
+
+  try {
+
+    const response =
+      await fetch("kosakata.json?v=1");
+
+    if (!response.ok) {
+      throw new Error("Gagal memuat kosakata");
+    }
+
+    kosakata =
+      await response.json();
+
+    updateProgress();
+    tampilkanKata();
+
+  } catch (error) {
+
+    console.error(error);
+
+    document.getElementById("japanese")
+      .textContent = "Gagal memuat";
+
+    document.getElementById("romaji")
+      .textContent = "";
+
+    document.getElementById("arti")
+      .textContent =
+      "Pastikan kosakata.json sudah ada di GitHub.";
+
+  }
+
+}
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+let sudahDipelajari =
+  JSON.parse(
+    localStorage.getItem("kitsumiKosakata")
+  ) || [];
+
+
+function updateProgress() {
+
+  if (kosakata.length === 0) return;
+
+  const jumlah =
+    sudahDipelajari.length;
+
+  const persen =
+    (jumlah / kosakata.length) * 100;
+
+  document.getElementById("progressText")
+    .textContent =
+    jumlah + " / " + kosakata.length;
+
+  document.getElementById("progressFill")
+    .style.width =
+    persen + "%";
+
+}
+
+
+function tandaiDipajari(index) {
+
+  if (!sudahDipelajari.includes(index)) {
+
+    sudahDipelahami = undefined;
+
+    sudahDipelajari.push(index);
+
+    localStorage.setItem(
+      "kitsumiKosakata",
+      JSON.stringify(sudahDipelajari)
+    );
+
+  }
+
+  updateProgress();
+
+}
+
+
+/* =========================
+   BELAJAR
+========================= */
+
+let posisi = 0;
+
+
+function tampilkanKata() {
+
+  if (kosakata.length === 0) return;
+
+  const kata =
+    kosakata[posisi];
+
+  document.getElementById("emoji")
+    .textContent =
+    kata.emoji;
+
+  document.getElementById("japanese")
+    .textContent =
+    kata.kanji;
+
+  document.getElementById("romaji")
+    .textContent =
+    kata.romaji;
+
+  document.getElementById("arti")
+    .textContent =
+    kata.arti;
+
+  document.getElementById("counter")
+    .textContent =
+    (posisi + 1) +
+    " / " +
+    kosakata.length;
+
+  tandaiDipajari(posisi);
+
+}
+
+
+function berikutnya() {
+
+  if (kosakata.length === 0) return;
+
+  posisi++;
+
+  if (posisi >= kosakata.length) {
+    posisi = 0;
+  }
+
+  tampilkanKata();
+
+}
+
+
+/* =========================
+   MODE
+========================= */
+
+function ubahMode(mode) {
+
+  const belajar =
+    document.getElementById("modeBelajar");
+
+  const tes =
+    document.getElementById("modeTes");
+
+  const hasil =
+    document.getElementById("hasilTes");
+
+  const belajarBtn =
+    document.getElementById("belajarBtn");
+
+  const tesBtn =
+    document.getElementById("tesBtn");
+
+  hasil.classList.add("hidden");
+
+  if (mode === "belajar") {
+
+    belajar.classList.remove("hidden");
+    tes.classList.add("hidden");
+
+    belajarBtn.classList.add("active");
+    tesBtn.classList.remove("active");
+
+  }
+
+  if (mode === "tes") {
+
+    belajar.classList.add("hidden");
+    tes.classList.remove("hidden");
+
+    belajarBtn.classList.remove("active");
+    tesBtn.classList.add("active");
+
+    mulaiTes();
+
+  }
+
+}
+
+
+/* =========================
+   TES
+========================= */
+
+let soalSekarang = 0;
+let skor = 0;
+let soalAcak = [];
+
+
+function acak(array) {
+
+  return [...array].sort(
+    () => Math.random() - 0.5
+  );
+
+}
+
+
+function mulaiTes() {
+
+  if (kosakata.length < 10) return;
+
+  soalSekarang = 0;
+  skor = 0;
+
+  document.getElementById("score")
+    .textContent =
+    skor;
+
+  soalAcak =
+    acak(kosakata).slice(0, 10);
+
+  document.getElementById("modeTes")
+    .classList.remove("hidden");
+
+  document.getElementById("hasilTes")
+    .classList.add("hidden");
+
+  tampilkanSoal();
+
+}
+
+
+function tampilkanSoal() {
+
+  const kata =
+    soalAcak[soalSekarang];
+
+  document.getElementById("quizNumber")
+    .textContent =
+    "Soal " +
+    (soalSekarang + 1) +
+    " / 10";
+
+  document.getElementById("quizQuestion")
+    .textContent =
+    kata.arti;
+
+  document.getElementById("result")
+    .textContent = "";
+
+  const answers =
+    document.getElementById("answers");
+
+  answers.innerHTML = "";
+
+
+  let salah =
+    kosakata.filter(
+      item =>
+        item.id !== kata.id
+    );
+
+
+  salah =
+    acak(salah).slice(0, 3);
+
+
+  let pilihan =
+    acak([
+      kata,
+      ...salah
+    ]);
+
+
+  pilihan.forEach(item => {
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "answer";
+
+    button.textContent =
+      item.romaji;
+
+    button.onclick =
+      function() {
+
+        jawab(
+          button,
+          item.romaji,
+          kata.romaji
+        );
+
+      };
+
     answers.appendChild(button);
 
   });
@@ -925,11 +1129,6 @@ function selesaiTes() {
    MULAI
 ========================= */
 
-updateProgress();
-
-tampilkanKata();
-
-</script>
-
+muatKosakata();
 </body>
 </html>
