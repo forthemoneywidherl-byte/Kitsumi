@@ -313,12 +313,38 @@
 
 
     <!-- PROGRESS -->
-    <div class="progress-card">
+<div class="progress-card">
 
-      <div class="progress-top">
-        <div class="progress-title">
-          Progress Hari Ini
-        </div>
+  <div class="progress-top">
+    <div class="progress-title">
+      📚 Kosakata
+    </div>
+
+    <div class="progress-number" id="vocabProgress">
+      0 / 50
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="vocabFill"></div>
+  </div>
+
+
+  <div class="progress-top" style="margin-top:20px;">
+    <div class="progress-title">
+      漢字 Kanji
+    </div>
+
+    <div class="progress-number" id="kanjiProgress">
+      0 / 120
+    </div>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="kanjiFill"></div>
+  </div>
+
+</div>
 
         <div class="progress-number" id="progressNumber">
 0 / 50
@@ -343,11 +369,15 @@
   <h3>Kosakata</h3>
   <p>Pelajari kata bahasa Jepang</p>
 </a>
-      <div class="menu-card">
-        <div class="menu-icon">漢字</div>
-        <h3>Kanji</h3>
-        <p>Belajar kanji dengan mudah</p>
-      </div>
+      <a href="kanji.html" class="menu-card">
+
+<div class="menu-icon">漢字</div>
+
+<h3>Kanji</h3>
+
+<p>Belajar kanji dengan mudah</p>
+
+</a>
 
       <div class="menu-card">
         <div class="menu-icon">💬</div>
@@ -413,4 +443,52 @@ function updateBerandaProgress() {
 updateBerandaProgress();
 
 </script>
+  <script>
+
+function updateBerandaProgress() {
+
+  // KOSAKATA
+  const vocab =
+    JSON.parse(
+      localStorage.getItem("kitsumiKosakata")
+    ) || [];
+
+  const jumlahVocab = Math.min(vocab.length, 50);
+
+  const persenVocab =
+    (jumlahVocab / 50) * 100;
+
+  document.getElementById("vocabProgress")
+    .textContent =
+    jumlahVocab + " / 50";
+
+  document.getElementById("vocabFill")
+    .style.width =
+    persenVocab + "%";
+
+
+  // KANJI
+  const kanji =
+    JSON.parse(
+      localStorage.getItem("kitsumiKanji")
+    ) || [];
+
+  const jumlahKanji = Math.min(kanji.length, 120);
+
+  const persenKanji =
+    (jumlahKanji / 120) * 100;
+
+  document.getElementById("kanjiProgress")
+    .textContent =
+    jumlahKanji + " / 120";
+
+  document.getElementById("kanjiFill")
+    .style.width =
+    persenKanji + "%";
+
+}
+
+updateBerandaProgress();
+
+  </script>
 </html>
