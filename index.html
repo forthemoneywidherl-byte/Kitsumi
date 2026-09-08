@@ -426,37 +426,45 @@ function updateBerandaProgress() {
 updateBerandaProgress();
 
 </script>
-  <script>
+<script>
 
 function updateBerandaProgress() {
 
+  // =========================
   // KOSAKATA
+  // =========================
+
   const vocab =
     JSON.parse(
       localStorage.getItem("kitsumiKosakata")
     ) || [];
 
-  const jumlahVocab = Math.min(vocab.length, 50);
+  const jumlahVocab =
+    Math.min(vocab.length, 800);
 
   const persenVocab =
-    (jumlahVocab / 50) * 100;
+    (jumlahVocab / 800) * 100;
 
   document.getElementById("vocabProgress")
     .textContent =
-    jumlahVocab + " / 50";
+    jumlahVocab + " / 800";
 
   document.getElementById("vocabFill")
     .style.width =
     persenVocab + "%";
 
 
+  // =========================
   // KANJI
+  // =========================
+
   const kanji =
     JSON.parse(
       localStorage.getItem("kitsumiKanji")
     ) || [];
 
-  const jumlahKanji = Math.min(kanji.length, 120);
+  const jumlahKanji =
+    Math.min(kanji.length, 120);
 
   const persenKanji =
     (jumlahKanji / 120) * 100;
@@ -473,5 +481,5 @@ function updateBerandaProgress() {
 
 updateBerandaProgress();
 
-  </script>
+</script>
 </html>
