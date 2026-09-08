@@ -400,33 +400,7 @@
   </div>
 
 </body>
-  <script>
-
-function updateBerandaProgress() {
-
-  const data =
-    JSON.parse(
-      localStorage.getItem("kitsumiKosakata")
-    ) || [];
-
-  const jumlah = data.length;
-
-  const persen =
-    Math.round((jumlah / 50) * 100);
-
-  document.getElementById("progressNumber")
-    .textContent =
-    jumlah + " / 50";
-
-  document.querySelector(".progress-fill")
-    .style.width =
-    persen + "%";
-}
-
-updateBerandaProgress();
-
-</script>
-<script>
+ <script>
 
 function updateBerandaProgress() {
 
@@ -473,12 +447,18 @@ function updateBerandaProgress() {
     .textContent =
     jumlahKanji + " / 120";
 
-  document.getElementById("kanjiFill")
-    .style.width =
-    persenKanji + "%";
+  const kanjiFill =
+    document.getElementById("kanjiFill");
+
+  if (kanjiFill) {
+    kanjiFill.style.width =
+      persenKanji + "%";
+  }
 
 }
 
+
+// Jalankan saat halaman dibuka
 updateBerandaProgress();
 
 </script>
