@@ -471,17 +471,9 @@
 
 
 <script>
-
-/* =========================
-   DATA
-========================= */
-
 let kosakata = [];
-
 let sudahDipelajari =
-  JSON.parse(
-    localStorage.getItem("kitsumiKosakata")
-  ) || [];
+  JSON.parse(localStorage.getItem("kitsumiKosakata")) || [];
 
 let posisi = 0;
 let soalSekarang = 0;
@@ -490,42 +482,53 @@ let soalAcak = [];
 
 
 /* =========================
-   LOAD JSON
+   LOAD DATA
 ========================= */
 
 async function muatKosakata() {
-
   try {
+    const url = new URL("kosakata.json", window.location.href);
+    url.searchParams.set("v", Date.now());
 
-    const response =
-      await fetch("kosakata.json?v=2");
+    const response = await fetch(url.toString(), {
+      cache: "no-store"
+    });
 
     if (!response.ok) {
-      throw new Error("kosakata.json tidak ditemukan");
+      throw new Error(
+        "HTTP " + response.status + " - " + response.statusText
+      );
     }
 
-    kosakata =
-      await response.json();
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error("Format kosakata.json harus berupa Array");
+    }
+
+    if (data.length === 0) {
+      throw new Error("kosakata.json kosong");
+    }
+
+    kosakata = data;
+
+    console.log("Kitsumi: berhasil memuat", kosakata.length, "kosakata");
 
     updateProgress();
     tampilkanKata();
 
   } catch (error) {
+    console.error("Kitsumi Error:", error);
 
-    console.error(error);
+    document.getElementById("emoji").textContent = "⚠️";
+    document.getElementById("japanese").textContent = "Gagal memuat";
+    document.getElementById("romaji").textContent = "";
+    document.getElementById("arti").textContent =
+      error.message;
 
-    document.getElementById("japanese")
-      .textContent = "Error";
-
-    document.getElementById("romaji")
-      .textContent = "";
-
-    document.getElementById("arti")
-      .textContent =
-      "Kosakata gagal dimuat.";
-
+    document.getElementById("counter").textContent =
+      "Periksa kosakata.json";
   }
-
 }
 
 
@@ -534,28 +537,276 @@ async function muatKosakata() {
 ========================= */
 
 function updateProgress() {
-
   if (kosakata.length === 0) return;
 
-  /*
-    Hanya hitung index yang masih
-    valid dalam database 800 kata.
-  */
+  sudahDipelajari = sudahDipelajari.filter(
+    index =>
+      Number.isInteger(index) &&
+      index >= 0 &&
+      index < kosakata.length
+  );
 
-  sudahDipelajari =
-    sudahDipelajari.filter(
-      index =>
-        Number.isInteger(index) &&
-        index >= 0 &&
-        index < kosakata.length
+  const jumlah = sudahDipelajari.length;
+
+  document.getElementById("progressText").textContent =
+    jumlah + " / " + kosakata.length;
+
+  document.getElementById("progressFill").style.width =
+    ((jumlah / kosakata.length) * 100) + "%";
+}
+
+
+function tandaiDipajari(index) {
+  if (!sudahDipelajari.includes(index)) {
+    sudahDipelajari.push(index);
+
+    localStorage.setItem(
+      "kitsumiKosakata",
+      JSON.stringify(sudahDipelajari)
     );
+  }
 
-  const jumlah =
-    sudahDipelajari.length;
+  updateProgress();
+}
 
-  const persen =
-    (jumlah / kosakata.length) * 100;
 
-  document.getElementById("progressText")
+/* =========================
+   BELAJAR
+========================= */
+
+function tampilkanKata() {
+  if (kosakata.length === 0) return;
+
+  const kata = kosakata[posisi];
+
+  document.getElementById("emoji").textContent =
+    kata.emoji || "📚";
+
+  document.getElementById("japanese").textContent =
+    kata.kanji || kata.kana || "";
+
+  document.getElementById("romaji").textContent =
+    kata.romaji || "";
+
+  document.getElementById("arti").textContent =
+    kata.arti || "";
+
+  document.getElementById("counter").textContent =
+    (posisi + 1) + " / " + kosakata.length;
+
+  tandaiDipajari(posisi);
+}
+
+
+function berikutnya() {
+  if (kosakata.length === 0) return;
+
+  posisi++;
+
+  if (posisi >= kosakata.length) {
+    posisi = 0;
+  }
+
+  tampilkanKata();
+}
+
+
+/* =========================
+   MODE
+========================= */
+
+function ubahMode(mode) {
+  const belajar = document.getElementById("modeBelajar");
+  const tes = document.getElementById("modeTes");
+  const hasil = document.getElementById("hasilTes");
+
+  const belajarBtn = document.getElementById("belajarBtn");
+  const tesBtn = document.getElementById("tesBtn");
+
+  hasil.classList.add("hidden");
+
+  if (mode === "belajar") {
+    belajar.classList.remove("hidden");
+    tes.classList.add("hidden");
+
+    belajarBtn.classList.add("active");
+    tesBtn.classList.remove("active");
+  }
+
+  if (mode === "tes") {
+    belajar.classList.add("hidden");
+    tes.classList.remove("hidden");
+
+    belajarBtn.classList.remove("active");
+    tesBtn.classList.add("active");
+
+    mulaiTes();
+  }
+}
+
+
+/* =========================
+   TES
+========================= */
+
+function acak(array) {
+  return [...array].sort(
+    () => Math.random() - 0.5
+  );
+}
+
+
+function mulaiTes() {
+  if (kosakata.length < 10) return;
+
+  soalSekarang = 0;
+  skor = 0;
+
+  document.getElementById("score").textContent = skor;
+
+  soalAcak = acak(kosakata).slice(0, 10);
+
+  document.getElementById("modeTes")
+    .classList.remove("hidden");
+
+  document.getElementById("hasilTes")
+    .classList.add("hidden");
+
+  tampilkanSoal();
+}
+
+
+function tampilkanSoal() {
+  const kata = soalAcak[soalSekarang];
+
+  document.getElementById("quizNumber").textContent =
+    "Soal " + (soalSekarang + 1) + " / 10";
+
+  document.getElementById("quizQuestion").textContent =
+    kata.arti;
+
+  document.getElementById("result").textContent = "";
+
+  const answers =
+    document.getElementById("answers");
+
+  answers.innerHTML = "";
+
+  const salah = acak(
+    kosakata.filter(
+      item => item.id !== kata.id
+    )
+  ).slice(0, 3);
+
+  const pilihan = acak([
+    kata,
+    ...salah
+  ]);
+
+  pilihan.forEach(item => {
+    const button =
+      document.createElement("button");
+
+    button.className = "answer";
+    button.textContent = item.romaji;
+
+    button.onclick = function() {
+      jawab(
+        button,
+        item.romaji,
+        kata.romaji
+      );
+    };
+
+    answers.appendChild(button);
+  });
+}
+
+
+function jawab(button, jawaban, benar) {
+  const semuaButton =
+    document.querySelectorAll(".answer");
+
+  semuaButton.forEach(
+    item => item.disabled = true
+  );
+
+  if (jawaban === benar) {
+    button.classList.add("correct");
+
+    document.getElementById("result")
+      .textContent = "✅ Benar!";
+
+    skor++;
+
+    document.getElementById("score")
+      .textContent = skor;
+
+  } else {
+    button.classList.add("wrong");
+
+    document.getElementById("result")
+      .textContent =
+      "❌ Salah! Jawaban: " + benar;
+
+    semuaButton.forEach(item => {
+      if (item.textContent === benar) {
+        item.classList.add("correct");
+      }
+    });
+  }
+
+  setTimeout(() => {
+    soalSekarang++;
+
+    if (soalSekarang >= 10) {
+      selesaiTes();
+    } else {
+      tampilkanSoal();
+    }
+  }, 900);
+}
+
+
+/* =========================
+   HASIL
+========================= */
+
+function selesaiTes() {
+  document.getElementById("modeTes")
+    .classList.add("hidden");
+
+  document.getElementById("hasilTes")
+    .classList.remove("hidden");
+
+  document.getElementById("finalScore")
+    .textContent = skor + " / 10";
+
+  let terbaik =
+    Number(
+      localStorage.getItem("kitsumiBestScore")
+    ) || 0;
+
+  if (skor > terbaik) {
+    terbaik = skor;
+
+    localStorage.setItem(
+      "kitsumiBestScore",
+      terbaik
+    );
+  }
+
+  document.getElementById("bestScore")
     .textContent =
-    jumlah + " / " +
+    "Rekor terbaik: " +
+    terbaik +
+    " / 10";
+}
+
+
+/* =========================
+   MULAI
+========================= */
+
+muatKosakata();
+</script>
